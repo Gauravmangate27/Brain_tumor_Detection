@@ -1,0 +1,12 @@
+flask
+werkzeug
+pillow
+numpy
+pandas
+matplotlib
+seaborn
+opencv-python
+scikit-learn
+tqdm
+tensorflow
+keras
