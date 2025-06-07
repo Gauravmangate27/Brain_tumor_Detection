@@ -8,7 +8,7 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 
 # Load your trained Keras model
-model = load_model('CNN_model.keras')
+model = load_model('CNN_best_model.keras')
 
 # Define the tumor class names in the same order as the model was trained
 class_names = ['Glioma Tumor', 'Meningioma Tumor', 'No Tumor', 'Pituitary Tumor']
