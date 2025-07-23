@@ -51,7 +51,7 @@ Clone the repo:
 bash
 Copy
 Edit
-git clone https://github.com/your-username/brain-tumor-detection.git
+git clone https://github.com/Gauravmangate27/Brain_tumor_Detection.git
 cd brain-tumor-detection
 Install required packages:
 
