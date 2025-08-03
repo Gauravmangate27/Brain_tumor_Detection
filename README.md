@@ -81,7 +81,7 @@ bash
 Copy
 Edit
 uvicorn app:app --reload  # if using FastAPI
-Then visit http://localhost:8000 to upload MRI files.
+Then visit https://brain-tumor-detection-gw2r.onrender.com to upload MRI files.
 
 📊 Results
 Task	Dataset	Accuracy / IoU
