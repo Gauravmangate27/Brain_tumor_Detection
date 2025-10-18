@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroScan - Brain Tumor Diagnosis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0066cc;
+            --secondary: #00a8e8;
+            --accent: #00c6ff;
+            --light: #e8f4ff;
+            --dark: #003366;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e8f4ff, #c2e9fb);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 60, 120, 0.15);
+            overflow: hidden;
+        }
+
+        /* Header Styles */
+        .header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 25px 40px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .tagline {
+            margin-left: auto;
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        /* Main Content */
+        .content {
+            display: flex;
+            min-height: 500px;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: var(--light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="%230066cc" opacity="0.1"/></svg>');
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .upload-container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+
+        .description {
+            color: #555;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .upload-box {
+            border: 3px dashed var(--primary);
+            border-radius: 15px;
+            padding: 40px 30px;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            margin-bottom: 25px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .upload-box:hover {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 102, 204, 0.15);
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .upload-text {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .browse-btn {
+            background: var(--primary);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 102, 204, 0.3);
+        }
+
+        .browse-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 102, 204, 0.4);
+        }
+
+        .file-name {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .submit-btn {
+            background: var(--success);
+            color: white;
+            padding: 15px 45px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+        }
+
+        .submit-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Result Section */
+        .result-section {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        .section-title {
+            color: var(--primary);
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .result-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .image-preview {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            height: 250px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .placeholder-text {
+            color: #6c757d;
+            font-size: 1rem;
+        }
+
+        .diagnosis-result {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .result-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .result-title {
+            font-size: 1.4rem;
+            color: var(--dark);
+        }
+
+        .result-content {
+            padding: 15px 0;
+        }
+
+        .probability-meter {
+            height: 25px;
+            background: #e9ecef;
+            border-radius: 12px;
+            margin: 20px 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .probability-fill {
+            height: 100%;
+            border-radius: 12px;
+            background: linear-gradient(to right, var(--warning), var(--success));
+            width: 0;
+            transition: width 1s ease;
+        }
+
+        .probability-text {
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--dark);
+            margin-top: 10px;
+        }
+
+        .recommendation {
+            background: #e8f4ff;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 20px;
+        }
+
+        .recommendation-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .recommendation-list {
+            padding-left: 20px;
+        }
+
+        .recommendation-list li {
+            margin-bottom: 5px;
+        }
+
+        /* Features Section */
+        .features-section {
+            background: linear-gradient(to right, var(--dark), var(--primary));
+            color: white;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .feature-title {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-description {
+            font-size: 1rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 102, 204, 0.2);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .tagline {
+                margin-left: 0;
+            }
+            
+            .upload-section, .result-section {
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 20px;
+            }
+            
+            .logo-text {
+                font-size: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .feature-card {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-brain logo-icon"></i>
+                <div class="logo-text">NeuroScan</div>
+            </div>
+            <div class="tagline">Advanced AI-Powered Brain Tumor Diagnosis</div>
+        </header>
+
+        <div class="content">
+            <section class="upload-section">
+                <div class="upload-container">
+                    <h1>Brain Tumor Detection</h1>
+                    <p class="description">
+                        Upload a brain MRI scan to analyze for potential tumors. Our AI-powered diagnostic system provides 
+                        accurate and instant analysis to support medical professionals.
+                    </p>
+                    
+                    <div class="upload-box" id="uploadBox">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <div class="upload-text">Drag & Drop your MRI scan here</div>
+                        <p>or</p>
+                        <button class="browse-btn">Browse Files</button>
+                        <input type="file" class="file-input" id="fileInput" accept="image/*">
+                        <div class="file-name" id="fileName">No file selected</div>
+                    </div>
+                    
+                    <button class="submit-btn" id="submitBtn" disabled>
+                        <i class="fas fa-diagnoses"></i> Analyze MRI Scan
+                    </button>
+                    <div class="spinner" id="spinner"></div>
+                </div>
+            </section>
+
+            <section class="result-section">
+                <h2 class="section-title">Diagnosis Report</h2>
+                <div class="result-container">
+                    <div class="image-preview" id="imagePreview">
+                        <div class="placeholder-text">Uploaded MRI will appear here</div>
+                    </div>
+                    
+                    <div class="diagnosis-result">
+                        <div class="result-header">
+                            <i class="fas fa-file-medical-alt result-icon"></i>
+                            <h3 class="result-title">Analysis Results</h3>
+                        </div>
+                        <div class="result-content" id="resultContent">
+                            <p>Upload an MRI scan to receive diagnosis results.</p>
+                        </div>
+                        
+                        <div class="probability-meter">
+                            <div class="probability-fill" id="probabilityFill"></div>
+                        </div>
+                        <div class="probability-text" id="probabilityText">
+                            Tumor probability: 0%
+                        </div>
+                        
+                        <div class="recommendation">
+                            <div class="recommendation-title">Next Steps:</div>
+                            <ul class="recommendation-list">
+                                <li>Upload an MRI scan to get personalized recommendations</li>
+                                <li>Consult with a neurologist for clinical evaluation</li>
+                                <li>Schedule follow-up scans as needed</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <section class="features-section">
+            <div class="feature-card">
+                <i class="fas fa-bolt feature-icon"></i>
+                <h3 class="feature-title">Rapid Analysis</h3>
+                <p class="feature-description">Get diagnostic results in seconds using our advanced AI algorithms.</p>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-chart-line feature-icon"></i>
+                <h3 class="feature-title">95% Accuracy</h3>
+                <p class="feature-description">Our system has been clinically validated with high diagnostic accuracy.</p>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-shield-alt feature-icon"></i>
+                <h3 class="feature-title">Secure & Private</h3>
+                <p class="feature-description">All medical data is encrypted and HIPAA compliant.</p>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-user-md feature-icon"></i>
+                <h3 class="feature-title">Clinician Support</h3>
+                <p class="feature-description">Designed to assist medical professionals in diagnosis.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('fileInput');
+            const uploadBox = document.getElementById('uploadBox');
+            const fileName = document.getElementById('fileName');
+            const submitBtn = document.getElementById('submitBtn');
+            const imagePreview = document.getElementById('imagePreview');
+            const resultContent = document.getElementById('resultContent');
+            const probabilityFill = document.getElementById('probabilityFill');
+            const probabilityText = document.getElementById('probabilityText');
+            const spinner = document.getElementById('spinner');
+
+            // File selection via button
+            uploadBox.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            // File selection via input
+            fileInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const file = this.files[0];
+                    fileName.textContent = file.name;
+                    submitBtn.disabled = false;
+                    
+                    // Preview image
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.innerHTML = `<img src="${e.target.result}" alt="MRI Preview">`;
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Drag and drop functionality
+            uploadBox.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadBox.style.borderColor = '#00c6ff';
+                uploadBox.style.backgroundColor = 'rgba(0, 198, 255, 0.1)';
+            });
+
+            uploadBox.addEventListener('dragleave', () => {
+                uploadBox.style.borderColor = '#0066cc';
+                uploadBox.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+            });
+
+            uploadBox.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadBox.style.borderColor = '#0066cc';
+                uploadBox.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+                
+                if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                    const file = e.dataTransfer.files[0];
+                    
+                    // Check if file is an image
+                    if (!file.type.match('image.*')) {
+                        alert('Please upload an image file (JPG, PNG, etc.)');
+                        return;
+                    }
+                    
+                    fileInput.files = e.dataTransfer.files;
+                    fileName.textContent = file.name;
+                    submitBtn.disabled = false;
+                    
+                    // Preview image
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.innerHTML = `<img src="${e.target.result}" alt="MRI Preview">`;
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Form submission
+            submitBtn.addEventListener('click', function() {
+                spinner.style.display = 'block';
+                submitBtn.disabled = true;
+                
+                // Simulate AI processing
+                setTimeout(() => {
+                    spinner.style.display = 'none';
+                    submitBtn.disabled = false;
+                    
+                    // Generate mock results (in a real app, this would come from an API)
+                    const tumorTypes = ['Glioma', 'Meningioma', 'Pituitary', 'No tumor detected'];
+                    const randomType = tumorTypes[Math.floor(Math.random() * tumorTypes.length)];
+                    const probability = Math.floor(Math.random() * 100);
+                    
+                    // Update probability visualization
+                    probabilityFill.style.width = `${probability}%`;
+                    probabilityText.textContent = `Tumor probability: ${probability}%`;
+                    
+                    // Update diagnosis content
+                    if (randomType === 'No tumor detected') {
+                        resultContent.innerHTML = `
+                            <p><strong>Diagnosis:</strong> No tumor detected</p>
+                            <p>The MRI scan appears normal with no signs of abnormalities.</p>
+                            <p><strong>Confidence:</strong> ${probability}%</p>
+                        `;
+                    } else {
+                        resultContent.innerHTML = `
+                            <p><strong>Diagnosis:</strong> ${randomType}</p>
+                            <p>Characteristics consistent with ${randomType.toLowerCase()} type tumor.</p>
+                            <p><strong>Confidence:</strong> ${probability}%</p>
+                            <p><strong>Note:</strong> This AI-assisted diagnosis should be reviewed by a medical professional.</p>
+                        `;
+                    }
+                    
+                    // Update recommendations
+                    const recommendation = document.querySelector('.recommendation-list');
+                    recommendation.innerHTML = `
+                        <li>Consult with a neurologist for clinical evaluation</li>
+                        <li>Schedule follow-up MRI in 3-6 months</li>
+                        <li>Consider additional tests: CT scan or biopsy if indicated</li>
+                        <li>Discuss treatment options with your healthcare provider</li>
+                    `;
+                    
+                    // Scroll to results
+                    document.querySelector('.result-section').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }, 2500); // Simulate 2.5 seconds processing time
+            });
+        });
+    </script>
+</body>
+</html>
